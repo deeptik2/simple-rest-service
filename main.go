@@ -1,6 +1,9 @@
 package main
 
-import "net/http"
+import (
+	"github.com/deeptik2/simple-rest-service/controllers"
+	"net/http"
+)
 import "github.com/gin-gonic/gin"
 
 type album struct {
@@ -16,11 +19,11 @@ var albums = []album{
 	{ID: "3", Title: "Sarah Vaughan and Clifford Brown", Artist: "Sarah Vaughan", Price: 39.99},
 }
 
-func getAlbums(c *gin.Context) {
+func GetAlbums(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, albums)
 }
 
-func postAlbums(c *gin.Context) {
+func PostAlbums(c *gin.Context) {
 	var newAlbum album
 
 	if err := c.BindJSON(&newAlbum); err != nil {
@@ -42,11 +45,14 @@ func getAlbumById(c *gin.Context) {
 	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "album not found"})
 }
 
+var router = gin.Default()
+
 func main() {
-	router := gin.Default()
-	router.GET("/albums", getAlbums)
-	router.POST("/albums", postAlbums)
+
+	router.GET("/ping", controllers.PingControllers)
+	router.GET("/albums", GetAlbums)
+	router.POST("/albums", PostAlbums)
 	router.GET("/albums/:id", getAlbumById)
 
-	router.Run("localhost:8080")
+	router.Run("localhost:8010")
 }

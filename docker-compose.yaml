@@ -1,0 +1,7 @@
+version: "3"
+
+services:
+  simple-rest-service:
+    build:
+      context: ./
+      dockerfile: Dockerfile
