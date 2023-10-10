@@ -25,7 +25,7 @@ func (service mockPingServiceStructWithError) PingService() (string, error) {
 	return "", err
 }
 
-func TestPingControllers1(t *testing.T) {
+func TestPingControllers(t *testing.T) {
 	fakeResponseWriter := httptest.NewRecorder()
 	fakeGinContext, _ := gin.CreateTestContext(fakeResponseWriter)
 
@@ -86,5 +86,25 @@ func TestPingControllersWithMockError(t *testing.T) {
 	// Given the status is OK, when I hit the endpoint, then I expect to see pong
 	if fakeResponseWriter.Body.String() == "ponging" {
 		t.Errorf("response string should not be ponging")
+	}
+}
+
+func TestPingControllersWithNotError(t *testing.T) {
+	fakeResponseWriter := httptest.NewRecorder()
+	fakeGinContext, _ := gin.CreateTestContext(fakeResponseWriter)
+
+	// now write test
+	PingControllers(fakeGinContext)
+
+	// 1st test
+	// Given the status is OK, when I hit the endpoint, then I expect 200OK
+	if fakeResponseWriter.Code != http.StatusOK {
+		t.Errorf("response code should be 200")
+	}
+
+	// 2nd test
+	// Given the status is OK, when I hit the endpoint, then I expect to see pong
+	if fakeResponseWriter.Body.String() != "pong" {
+		t.Errorf("response string should be pong")
 	}
 }
